@@ -24,7 +24,7 @@ __all__ = [
 URL = "https://depmap.org/portal/download/api/downloads"
 DEPMAP_MODULE = pystow.module("bio", "depmap")
 ACHILLES_NAME = "Achilles_gene_dependency.csv"
-CRISPR_NAME = "CRISPR_gene_dependency.csv"
+CRISPR_NAME = "CRISPRGeneEffect.csv"
 
 
 @lru_cache(1)
