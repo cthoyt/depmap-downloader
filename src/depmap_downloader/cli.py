@@ -19,7 +19,11 @@ from typing import Optional
 import click
 from more_click import force_option, verbose_option
 
-from .api import ensure_achilles_gene_dependencies, ensure_crispr_gene_dependencies
+from .api import (
+    ensure_achilles_gene_dependencies,
+    ensure_crispr_gene_dependencies,
+    ensure_rnai_gene_dependencies,
+)
 
 __all__ = [
     "main",
@@ -37,6 +41,8 @@ def main(version: Optional[str], force: bool):
     path = ensure_crispr_gene_dependencies(version=version, force=force)
     click.echo(f"downloaded {path}")
     path = ensure_achilles_gene_dependencies(version=version, force=force)
+    click.echo(f"downloaded {path}")
+    path = ensure_rnai_gene_dependencies(force=force)
     click.echo(f"downloaded {path}")
 
 
