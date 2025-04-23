@@ -28,7 +28,7 @@ DEPMAP_MODULE = pystow.module("bio", "depmap")
 ACHILLES_NAME = "Achilles_gene_dependency.csv"
 CRISPR_NAME = "CRISPRGeneEffect.csv"
 CRISPR_OLD_NAME = "CRISPR_gene_dependency.csv"
-RNAI_NAME = "D2_combined_gene_dep_scores.csv"
+RNAI_DEMETER_NAME = "D2_combined_gene_dep_scores.csv"
 
 
 @lru_cache(1)
@@ -95,10 +95,11 @@ def get_latest_rnai_url():
     """Get the latest RNAi file URL."""
     table = get_downloads_table()["table"]
     for entry in table:
-        # Note: there is only one RNAi file in the table, so we can just return it
-        if entry["fileName"] == RNAI_NAME:
+        # Note: there is only one RNAi Demeter file in the table, so we can just
+        # return the first match and get the 'version' from the release name.
+        if entry["fileName"] == RNAI_DEMETER_NAME:
             return entry["downloadUrl"], entry["releaseName"].replace(" ", "_").lower()
-    raise ValueError(f"Could not find {RNAI_NAME} in downloads table")
+    raise ValueError(f"Could not find {RNAI_DEMETER_NAME} in downloads table")
 
 
 def ensure_rnai_gene_dependencies(force: bool = False) -> Path:
@@ -107,7 +108,7 @@ def ensure_rnai_gene_dependencies(force: bool = False) -> Path:
     return DEPMAP_MODULE.ensure(
         version,
         url=rnai_url,
-        name=RNAI_NAME,
+        name=RNAI_DEMETER_NAME,
         force=force,
     )
 
