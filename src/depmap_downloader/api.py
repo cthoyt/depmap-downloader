@@ -100,14 +100,14 @@ def get_latest_rnai_url():
     raise ValueError(f"Could not find {RNAI_NAME} in downloads table")
 
 
-def ensure_rnai_gene_dependencies() -> Path:
+def ensure_rnai_gene_dependencies(force: bool = False) -> Path:
     """Get the RNAi gene dependencies file URL."""
     rnai_url, version = get_latest_rnai_url()
     return DEPMAP_MODULE.ensure(
         version,
         url=rnai_url,
         name=RNAI_NAME,
-        force=False,
+        force=force,
     )
 
 
