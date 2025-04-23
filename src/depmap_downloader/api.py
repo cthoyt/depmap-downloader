@@ -25,6 +25,7 @@ URL = "https://depmap.org/portal/download/api/downloads"
 DEPMAP_MODULE = pystow.module("bio", "depmap")
 ACHILLES_NAME = "Achilles_gene_dependency.csv"
 CRISPR_NAME = "CRISPRGeneEffect.csv"
+RNAI_NAME = "D2_combined_gene_dep_scores.csv"
 
 
 @lru_cache(1)
@@ -85,6 +86,28 @@ def ensure_achilles_gene_dependencies(version: Optional[str] = None, force: bool
         name=ACHILLES_NAME,
         force=force,
     )
+
+
+def get_latest_rnai_url():
+    """Get the latest RNAi file URL."""
+    table = get_downloads_table()["table"]
+    for entry in table:
+        # Note: there is only one RNAi file in the table, so we can just return it
+        if entry["fileName"] == RNAI_NAME:
+            return entry["downloadUrl"], entry["releaseName"].replace(" ", "_").lower()
+    raise ValueError(f"Could not find {RNAI_NAME} in downloads table")
+
+
+def ensure_rnai_gene_dependencies() -> Path:
+    """Get the RNAi gene dependencies file URL."""
+    rnai_url, version = get_latest_rnai_url()
+    return DEPMAP_MODULE.ensure(
+        version,
+        url=rnai_url,
+        name=RNAI_NAME,
+        force=False,
+    )
+
 
 
 def get_crispr_essentiality(symbol: str) -> float:
