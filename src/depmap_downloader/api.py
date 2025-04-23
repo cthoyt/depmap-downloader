@@ -17,6 +17,8 @@ __all__ = [
     "ensure_crispr_gene_dependencies",
     "get_achilles_gene_dependencies_url",
     "ensure_achilles_gene_dependencies",
+    "get_latest_rnai_url",
+    "ensure_rnai_gene_dependencies",
     "get_rnai_essentiality",
     "get_crispr_essentiality",
 ]
