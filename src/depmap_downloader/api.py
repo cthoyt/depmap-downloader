@@ -27,6 +27,7 @@ URL = "https://depmap.org/portal/download/api/downloads"
 DEPMAP_MODULE = pystow.module("bio", "depmap")
 ACHILLES_NAME = "Achilles_gene_dependency.csv"
 CRISPR_NAME = "CRISPRGeneEffect.csv"
+CRISPR_OLD_NAME = "CRISPR_gene_dependency.csv"
 RNAI_NAME = "D2_combined_gene_dep_scores.csv"
 
 
