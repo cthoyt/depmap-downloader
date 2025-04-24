@@ -33,13 +33,14 @@
     -->
 </p>
 
-Reproducibly download the latest version of [Cancer Dependency Map (DepMap)](https://depmap.org) datasets.
+Reproducibly download the latest version of
+[Cancer Dependency Map (DepMap)](https://depmap.org) datasets.
 
 ## 💪 Getting Started
 
 The DepMap has a secret API that this package wraps, so you can always get the
-latest version of some select datasets
-using [`pystow`](https://github.com/cthoyt/pystow).
+latest version of some select datasets using
+[`pystow`](https://github.com/cthoyt/pystow).
 
 Get the Achilles gene dependencies:
 
