@@ -12,17 +12,23 @@ __all__ = [
     "URL",
     "crispr_gene_dependencies_url",
     "ensure_achilles_gene_dependencies",
+    "ensure_achilles_gene_dependencies",
     "ensure_crispr_gene_dependencies",
+    "ensure_rnai_gene_dependencies",
     "get_achilles_gene_dependencies_url",
     "get_crispr_essentiality",
     "get_downloads_table",
+    "get_latest_rnai_url",
+    "get_rnai_essentiality",
     "get_rnai_essentiality",
 ]
 
 URL = "https://depmap.org/portal/download/api/downloads"
 DEPMAP_MODULE = pystow.module("bio", "depmap")
 ACHILLES_NAME = "Achilles_gene_dependency.csv"
-CRISPR_NAME = "CRISPR_gene_dependency.csv"
+CRISPR_NAME = "CRISPRGeneEffect.csv"
+CRISPR_OLD_NAME = "CRISPR_gene_dependency.csv"
+RNAI_DEMETER_NAME = "D2_combined_gene_dep_scores.csv"
 
 
 @lru_cache(1)
@@ -81,6 +87,28 @@ def ensure_achilles_gene_dependencies(version: str | None = None, force: bool = 
         version,
         url=get_achilles_gene_dependencies_url(version=version),
         name=ACHILLES_NAME,
+        force=force,
+    )
+
+
+def get_latest_rnai_url() -> tuple[str, str]:
+    """Get the latest RNAi file URL."""
+    table = get_downloads_table()["table"]
+    for entry in table:
+        # Note: there is only one RNAi Demeter file in the table, so we can just
+        # return the first match and get the 'version' from the release name.
+        if entry["fileName"] == RNAI_DEMETER_NAME:
+            return entry["downloadUrl"], entry["releaseName"].replace(" ", "_").lower()
+    raise ValueError(f"Could not find {RNAI_DEMETER_NAME} in downloads table")
+
+
+def ensure_rnai_gene_dependencies(force: bool = False) -> Path:
+    """Get the RNAi gene dependencies file URL."""
+    rnai_url, version = get_latest_rnai_url()
+    return DEPMAP_MODULE.ensure(
+        version,
+        url=rnai_url,
+        name=RNAI_DEMETER_NAME,
         force=force,
     )
 
