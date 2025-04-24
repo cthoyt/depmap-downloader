@@ -8,7 +8,7 @@ import depmap_downloader as dd
 class TestAPI(unittest.TestCase):
     """Test the API."""
 
-    def test_get_rnai_demeter(self):
+    def test_get_rnai_demeter(self) -> None:
         """Test getting the latest RNAi Demeter file."""
         url, version = dd.get_latest_rnai_url()
         self.assertEqual("https://ndownloader.figshare.com/files/13515395", url)

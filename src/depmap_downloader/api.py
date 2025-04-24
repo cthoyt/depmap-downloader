@@ -12,14 +12,14 @@ __all__ = [
     "URL",
     "crispr_gene_dependencies_url",
     "ensure_achilles_gene_dependencies",
-    "ensure_crispr_gene_dependencies",
-    "get_achilles_gene_dependencies_url",
     "ensure_achilles_gene_dependencies",
-    "get_latest_rnai_url",
+    "ensure_crispr_gene_dependencies",
     "ensure_rnai_gene_dependencies",
-    "get_rnai_essentiality",
+    "get_achilles_gene_dependencies_url",
     "get_crispr_essentiality",
     "get_downloads_table",
+    "get_latest_rnai_url",
+    "get_rnai_essentiality",
     "get_rnai_essentiality",
 ]
 
@@ -91,7 +91,7 @@ def ensure_achilles_gene_dependencies(version: str | None = None, force: bool = 
     )
 
 
-def get_latest_rnai_url():
+def get_latest_rnai_url() -> tuple[str, str]:
     """Get the latest RNAi file URL."""
     table = get_downloads_table()["table"]
     for entry in table:
@@ -111,7 +111,6 @@ def ensure_rnai_gene_dependencies(force: bool = False) -> Path:
         name=RNAI_DEMETER_NAME,
         force=force,
     )
-
 
 
 def get_crispr_essentiality(symbol: str) -> float:
