@@ -1,4 +1,5 @@
 Usage
 =====
-.. automodule:: depmap_downloader.api
+
+.. automodule:: depmap_downloader
     :members:
