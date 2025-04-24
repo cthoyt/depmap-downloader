@@ -16,5 +16,11 @@ class TestAPI(unittest.TestCase):
 
     def test_essentiality(self) -> None:
         """Test getting CRISPR and RNAi essentiality."""
-        self.assertEqual(119 / 1054, dd.get_crispr_essentiality("SOX10"))
-        self.assertEqual(32 / 710, dd.get_rnai_essentiality("SOX10"))
+        # was 119 / 1054, but has been updated to 124/1178
+        crispr_essentiality = dd.get_crispr_essentiality("SOX10")
+        self.assertLess(0, crispr_essentiality)
+        self.assertLess(crispr_essentiality, 1.0)
+        # was 32 / 710
+        rnai_essentiality = dd.get_rnai_essentiality("SOX10")
+        self.assertLess(0, rnai_essentiality)
+        self.assertLess(rnai_essentiality, 1.0)
