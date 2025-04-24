@@ -1,22 +1,47 @@
 Installation
 ============
-The most recent release can be installed from
-`PyPI <https://pypi.org/project/depmap_downloader>`_ with:
 
-.. code-block:: shell
+The most recent release can be installed from `PyPI
+<https://pypi.org/project/depmap_downloader>`_ with uv:
 
-    $ pip install depmap_downloader
+.. code-block:: console
 
-The most recent code and data can be installed directly from GitHub with:
+    $ uv pip install depmap_downloader
 
-.. code-block:: shell
+or with pip:
 
-    $ pip install git+https://github.com/cthoyt/depmap_downloader.git
+.. code-block:: console
 
-To install in development mode, use the following:
+    $ python3 -m pip install depmap_downloader
 
-.. code-block:: shell
+Installing from git
+-------------------
 
-    $ git clone git+https://github.com/cthoyt/depmap_downloader.git
-    $ cd depmap_downloader
-    $ pip install -e .
+The most recent code and data can be installed directly from GitHub with uv:
+
+.. code-block:: console
+
+    $ uv pip install git+https://github.com/cthoyt/depmap-downloader.git
+
+or with pip:
+
+.. code-block:: console
+
+    $ python3 -m pip install git+https://github.com/cthoyt/depmap-downloader.git
+
+Installing for development
+--------------------------
+
+To install in development mode with uv:
+
+.. code-block:: console
+
+    $ git clone git+https://github.com/cthoyt/depmap-downloader.git
+    $ cd depmap-downloader
+    $ uv pip install -e .
+
+or with pip:
+
+.. code-block:: console
+
+    $ python3 -m pip install -e .

@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Main code."""
 
 from functools import lru_cache
 from pathlib import Path
-from typing import Optional
+from typing import Any, cast
 
 import bs4
 import pystow
@@ -12,13 +10,13 @@ import requests
 
 __all__ = [
     "URL",
-    "get_downloads_table",
     "crispr_gene_dependencies_url",
+    "ensure_achilles_gene_dependencies",
     "ensure_crispr_gene_dependencies",
     "get_achilles_gene_dependencies_url",
-    "ensure_achilles_gene_dependencies",
-    "get_rnai_essentiality",
     "get_crispr_essentiality",
+    "get_downloads_table",
+    "get_rnai_essentiality",
 ]
 
 URL = "https://depmap.org/portal/download/api/downloads"
@@ -28,9 +26,9 @@ CRISPR_NAME = "CRISPR_gene_dependency.csv"
 
 
 @lru_cache(1)
-def get_downloads_table():
+def get_downloads_table() -> Any:
     """Get the full downloads table from the secret API."""
-    return requests.get(URL).json()
+    return requests.get(URL, timeout=15).json()
 
 
 @lru_cache(1)
@@ -39,25 +37,25 @@ def get_latest() -> str:
     latest = next(
         release for release in get_downloads_table()["releaseData"] if release["isLatest"]
     )
-    return latest["releaseName"]
+    return cast(str, latest["releaseName"])
 
 
-def _help_download(name: str, version: Optional[str] = None) -> str:
+def _help_download(name: str, version: str | None = None) -> str:
     if version is None:
         version = get_latest()
     for download in get_downloads_table()["table"]:
         if download["fileName"] == name and download["releaseName"] == version:
-            return download["downloadUrl"]
+            return cast(str, download["downloadUrl"])
     raise ValueError
 
 
-def crispr_gene_dependencies_url(version: Optional[str] = None) -> str:
+def crispr_gene_dependencies_url(version: str | None = None) -> str:
     """Get the CRISPR gene dependencies file URL."""
     return _help_download(CRISPR_NAME, version=version)
 
 
 #: Columns: genes in the format "HUGO (Entrez)" - Rows: cell lines (Broad IDs)
-def ensure_crispr_gene_dependencies(version: Optional[str] = None, force: bool = False) -> Path:
+def ensure_crispr_gene_dependencies(version: str | None = None, force: bool = False) -> Path:
     """Ensure the CRISPR gene dependencies file is downloaded."""
     if version is None:
         version = get_latest()
@@ -69,13 +67,13 @@ def ensure_crispr_gene_dependencies(version: Optional[str] = None, force: bool =
     )
 
 
-def get_achilles_gene_dependencies_url(version: Optional[str] = None) -> str:
+def get_achilles_gene_dependencies_url(version: str | None = None) -> str:
     """Get the Achilles gene dependencies file URL."""
     return _help_download(ACHILLES_NAME, version=version)
 
 
 # Columns: genes in the format "HUGO (Entrez)" - Rows: cell lines (Broad IDs)
-def ensure_achilles_gene_dependencies(version: Optional[str] = None, force: bool = False) -> Path:
+def ensure_achilles_gene_dependencies(version: str | None = None, force: bool = False) -> Path:
     """Ensure the Achilles gene dependencies file is downloaded."""
     if version is None:
         version = get_latest()
@@ -99,9 +97,11 @@ def get_rnai_essentiality(symbol: str) -> float:
 
 def _get_essentiality(symbol: str, dataset: str) -> float:
     url = f"https://depmap.org/portal/tile/gene/essentiality/{symbol}"
-    res = requests.get(url).json()
+    res = requests.get(url, timeout=15).json()
     soup = bs4.BeautifulSoup(res["html"], features="html.parser")
-    element = soup.find("h4", **{"class": dataset})
+    element = soup.find("h4", class_=dataset)
+    if element is None or element.text is None:
+        raise ValueError
     fraction = element.text.split(":")[-1]
     num, denom = [float(part) for part in fraction.split("/")]
     return num / denom
